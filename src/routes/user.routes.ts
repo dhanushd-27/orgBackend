@@ -1,22 +1,15 @@
 import { Router } from "express";
+import { getAllOrgs, getUserDetails, updateDetails } from "../controllers/user.controller";
 
 const UserRouter = Router();
 
 // Add Auth Middleware
-UserRouter.get("/orgs", (req, res) => {
-  res.send("Fetch all orgs");
-});
+UserRouter.get("/orgs", getAllOrgs);
 
-UserRouter.get("/me", (req, res) => {
-  res.send("Fetch my details");
-});
+UserRouter.get("/me", getUserDetails);
 
-UserRouter.post("/me", (req, res) => {
-  res.send("Update my details");
-});
+UserRouter.put("/me", updateDetails);
 
-UserRouter.post("/create/org", (req, res) => {
-  res.send("Create an org");
-});
+// UserRouter.post("/create/org", createOrg);
 
 export default UserRouter;

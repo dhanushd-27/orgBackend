@@ -8,3 +8,8 @@ export interface signInbody{
   email: string,
   password: string
 }
+
+export interface user{
+  id: string,
+  email: string
+}

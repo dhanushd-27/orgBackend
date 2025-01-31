@@ -45,7 +45,7 @@ export const loginUser = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET as string);
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET as string);
 
     res.status(200).json({
       message: "Login Successfull",
@@ -59,3 +59,70 @@ export const loginUser = async (req: Request, res: Response) => {
     })
   } 
 }
+
+export const getUserDetails = async (req: Request, res: Response)=> {
+  try {
+    const { id } = req.user;
+    const user = await UserModel.findById({ _id: id});
+
+    res.status(200).json({
+      message: "User Details fetched successfully",
+      user
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      error
+    });
+  }
+}
+
+export const getAllOrgs = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.user;
+    const user = await UserModel.findById(id);
+
+    if(!user?.organizations){
+      res.status(200).json({
+        message: "No organizations found"
+      });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Organizations fetched successfully",
+      organizations: user.organizations
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      error
+    });
+  }
+}
+
+// Change this
+export const updateDetails = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.user;
+    const { name, email } = req.body;
+    const user = await UserModel.findByIdAndUpdate(id, {
+      name,
+      email
+    }, { new: true });
+
+    res.status(200).json({
+      message: "User Details updated successfully",
+      user
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal Server Error",
+      error
+    });
+  }
+}
+
+// export const createOrg = async (req: Request, res: Response) => 

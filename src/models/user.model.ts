@@ -9,7 +9,7 @@ const UserSchema = new Schema({
       orgId: { type: mongoose.Schema.Types.ObjectId, ref: "Organization" },
       role: { type: String, enum: ["Owner", "Admin", "Member"], required: true },
     },
-  ], required: false},
+  ], required: false, default: [] },
 });
 
 export const UserModel = mongoose.model("User", UserSchema);
