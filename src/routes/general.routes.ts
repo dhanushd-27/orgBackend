@@ -1,30 +1,10 @@
 import { Request, Response, Router } from "express";
-import { UserModel } from "../models/user.model";
+import { createUser, loginUser } from "../controllers/user.controller";
 
 const GeneralRouter = Router();
 
-GeneralRouter.post("/login", (req: Request, res: Response) => {
-  res.send("Login route");
-});
+GeneralRouter.post("/signup", createUser);
 
-GeneralRouter.post("/signup", async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
-
-  try {
-    await UserModel.create({
-      name,
-      email,
-      password
-    });
-
-    res.send("Signup Successfull");
-
-  } catch (error) {
-    res.json({
-      message: "Signup Failed",
-      error
-    })
-  }
-});
+GeneralRouter.post("/login", loginUser);
 
 export default GeneralRouter;
