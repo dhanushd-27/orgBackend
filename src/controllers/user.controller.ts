@@ -45,6 +45,7 @@ export const loginUser = async (req: Request, res: Response) => {
       return;
     }
 
+    // Note: Bearer Token can also be used
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET as string);
 
     res.status(200).json({
@@ -63,7 +64,7 @@ export const loginUser = async (req: Request, res: Response) => {
 export const getUserDetails = async (req: Request, res: Response)=> {
   try {
     const { id } = req.user;
-    const user = await UserModel.findById({ _id: id});
+    const user = await UserModel.findById({ _id: id}).select('-password');
 
     res.status(200).json({
       message: "User Details fetched successfully",
@@ -102,15 +103,13 @@ export const getAllOrgs = async (req: Request, res: Response) => {
   }
 }
 
-// Change this
 export const updateDetails = async (req: Request, res: Response) => {
   try {
     const { id } = req.user;
-    const { name, email } = req.body;
-    const user = await UserModel.findByIdAndUpdate(id, {
-      name,
-      email
-    }, { new: true });
+    delete req.body.password;
+    // const { password, ...updateData } = req.body;
+
+    const user = await UserModel.findByIdAndUpdate(id, req.body, { new: true }).select('-password');
 
     res.status(200).json({
       message: "User Details updated successfully",
@@ -124,5 +123,3 @@ export const updateDetails = async (req: Request, res: Response) => {
     });
   }
 }
-
-// export const createOrg = async (req: Request, res: Response) => 

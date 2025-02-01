@@ -4,6 +4,7 @@ const OrgSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String },
   logo: { type: String },
+  owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
   members: [
     {
       userId: { type: Schema.Types.ObjectId, ref: "User" },

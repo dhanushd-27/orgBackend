@@ -1,17 +1,23 @@
 import { Router } from "express"
-
+import { createOrg, deleteOrg, getOrgDetails, updateOrgDetails } from "../controllers/org.controller";
+import { authMiddleware } from "../middlewares/auth.middleware";
+import { ownerMiddleware } from "../middlewares/owner.middleware";
 const OrgRouter = Router();
 
-OrgRouter.get("/details", (req, res) => {
-  res.send("Fetch org details");
-});
+OrgRouter.post("/create", authMiddleware, createOrg);
 
-// Add Owner Middleware
-OrgRouter.post("/update", (req, res) => {
-  res.send("Update org details");
-});
+OrgRouter.get("/details/:id", getOrgDetails);
 
-// Add Owner Middleware
-OrgRouter.delete("/delete", (req, res) => {
-  res.send("Delete org");
-});
+OrgRouter.put("/update/:id", 
+  authMiddleware, 
+  ownerMiddleware, 
+  updateOrgDetails
+);
+
+OrgRouter.delete("/delete/:id",
+  authMiddleware,
+  ownerMiddleware,
+  deleteOrg
+);
+
+export default OrgRouter;
