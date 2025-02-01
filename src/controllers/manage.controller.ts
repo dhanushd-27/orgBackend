@@ -11,6 +11,8 @@ export const addMember = async (req: Request, res: Response) => {
       res.status(400).send("User ID is required");
       return;
     }
+
+    // Issue to be resolved - repeated members in the list
     
     const isSuccess = await OrgModel.findByIdAndUpdate(id , {
       $push: {
@@ -62,18 +64,13 @@ export const removeMember = async (req: Request, res: Response) => {
       return;
     }
 
-    const isSuccess = await OrgModel.findByIdAndUpdate( id, {
+    await OrgModel.findByIdAndUpdate( id, {
       $pull: {
         members: {
           userId,
         },
       },
     });
-
-    if(!isSuccess) {
-      res.status(404).send("Organization not found");
-      return;
-    }
 
     const removeOrg = await UserModel.findByIdAndUpdate( userId , {
       $pull: {
