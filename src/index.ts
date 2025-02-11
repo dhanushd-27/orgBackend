@@ -4,10 +4,12 @@ import { connectDB } from './db/db';
 import GeneralRouter from './routes/general.routes';
 import UserRouter from './routes/user.routes';
 import OrgRouter from './routes/org.routes';
+import cors from 'cors';
 dotenv.config();
 connectDB();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use('/api/v1', GeneralRouter);
